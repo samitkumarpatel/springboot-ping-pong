@@ -30,8 +30,11 @@ jobs:
           [ "$tag" = "main" ] && tag=latest
           echo "IMAGE=${REGISTRY}/${GITHUB_REPOSITORY,,}:${tag}" >> "$GITHUB_ENV"
 
+      - name: Package jar
+        run: ./mvnw -B package
+
       - name: Build image
-        run: ./mvnw -B spring-boot:build-image -Dspring-boot.build-image.imageName=${IMAGE} -Dspring-boot.build-image.imagePlatform=linux/amd64 -Dspring-boot.build-image.builder=paketobuildpacks/builder-jammy-base:latest
+        run: docker build --platform linux/amd64 -t ${IMAGE} .
 
       - name: Log in to ghcr.io
         uses: docker/login-action@v3
