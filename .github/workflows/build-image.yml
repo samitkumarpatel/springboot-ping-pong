@@ -2,7 +2,7 @@ name: Build and push image
 
 on:
   push:
-    branches: [main]
+    branches: [main, lambda-rest]
   workflow_dispatch:
 
 permissions:
@@ -25,7 +25,10 @@ jobs:
           cache: maven
 
       - name: Compute image name
-        run: echo "IMAGE=${REGISTRY}/${GITHUB_REPOSITORY,,}:latest" >> "$GITHUB_ENV"
+        run: |
+          tag="${GITHUB_REF_NAME}"
+          [ "$tag" = "main" ] && tag=latest
+          echo "IMAGE=${REGISTRY}/${GITHUB_REPOSITORY,,}:${tag}" >> "$GITHUB_ENV"
 
       - name: Build image
         run: ./mvnw -B spring-boot:build-image -Dspring-boot.build-image.imageName=${IMAGE} -Dspring-boot.build-image.imagePlatform=linux/amd64 -Dspring-boot.build-image.builder=paketobuildpacks/builder-jammy-base:latest
