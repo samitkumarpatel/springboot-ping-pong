@@ -1,0 +1,11 @@
+management:
+  endpoints:
+    health:
+      show-details: always
+    web:
+      exposure:
+        include: "*"
+
+spring:
+  application:
+    name: springboot-ping-pong
