@@ -2,7 +2,7 @@ name: Build and push image
 
 on:
   push:
-    branches: [main, lambda-rest]
+    branches: [main, lambda-rest, lambda-event]
   workflow_dispatch:
 
 permissions:
